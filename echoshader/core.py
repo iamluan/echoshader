@@ -9,11 +9,11 @@ import param
 import xarray
 from bokeh.util.warnings import BokehUserWarning
 
-from .box import get_box_plot, get_box_stream
-from .curtain import curtain_plot
-from .echogram import create_echogram
-from .hist import hist_plot, table_plot
-from .map import convert_EPSG, get_track_corners, tile_plot, track_plot
+from .plots.box import get_box_plot, get_box_stream
+from .plots.curtain import curtain_plot
+from .plots.echogram import create_echogram
+from .plots.hist import hist_plot, table_plot
+from .plots.map import convert_EPSG, get_track_corners, tile_plot, track_plot
 from .utils import curtain_opts, tiles
 
 warnings.simplefilter(action="ignore", category=BokehUserWarning)
@@ -178,7 +178,7 @@ class Echoshader(param.Parameterized):
         vmax: float = None,
         rgb_composite: bool = False,
         vert_dim: Optional[str] = "echo_range",
-        opts=[],
+        **opts,
     ):
         """
         Display echogram plots based on specified parameters.
@@ -413,13 +413,16 @@ class Echoshader(param.Parameterized):
         reset_stream.add_subscriber(self._update_gram_reset)
 
         # Apply bounds and options
-        return (echogram * self.gram_bounds).opts(self.gram_opts)
+        if self.gram_opts:
+            return (echogram * self.gram_bounds).opts(**self.gram_opts)
+        else:
+            return echogram * self.gram_bounds
 
     def track(
         self,
         tile: str = None,
         control: bool = False,
-        opts=[],
+        **opts,
     ):
         """
         Display track plots based on specified parameters.
