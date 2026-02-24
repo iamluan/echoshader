@@ -7,6 +7,6 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-fallback_version = "unknown"
+fallback_version = "0.0.0"
 local_scheme = "node-and-date"
 write_to = "echoshader/_echoshader_version.py"
